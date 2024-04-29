@@ -1,41 +1,30 @@
 import { motion } from "framer-motion"
-
+import images from "./images"
+import { useEffect, useRef, useState } from "react";
 function App() {
-  const articles = [
-    { id: 1, color: "red", text: "this is my description." },
-    { id: 1, color: "red", text: "this is my description." },
-    { id: 1, color: "red", text: "this is my description." },
-    { id: 1, color: "red", text: "this is my description." },
-    { id: 1, color: "red", text: "this is my description." },
-    { id: 1, color: "red", text: "this is my description." },
-    { id: 1, color: "red", text: "this is my description." },
-    { id: 1, color: "red", text: "this is my description." },
-    { id: 1, color: "red", text: "this is my description." },
-    { id: 1, color: "red", text: "this is my description." },
-    { id: 1, color: "red", text: "this is my description." },
-    { id: 1, color: "red", text: "this is my description." },
 
-  ]
+  const [width, setWidth] = useState(0)
+
+  const carousel = useRef();
+
+  useEffect(() => {
+    setWidth(carousel.current.scrollWidth - carousel.current.offsetWidth)
+  }, [])
+
   return (
     <>
-      <div className="grid grid-cols-6 p-20 gap-5">
+      <div className="mx-[20%] my-[10%]">
 
-        {articles.map((article, i) => {
-          return (
-            <motion.div key={article.id} className=" col-span-1 sm:col-span-3 flex justify-center items-center bg-slate-500 rounded-2xl text-white py-32"
-              initial={{ opacity: 0, translateX: -150, translateY: -100 }}
+        <motion.div ref={carousel} className="carousel overflow-hidden ">
+          <motion.div drag="x" dragConstraints={{ right: 0, left: -width }} className="inner_carousel flex ">
+            {images.map((image, i) => (
+              <motion.div key={i} className="item min-w-[30rem] min-h-[40rem] p-[40px]  cursor-grab">
+                <img src={image} alt="" className="w-full h-full rounded-md pointer-events-none" />
+              </motion.div>
 
-              animate={{ opacity: 1, translateX: 0, translateY: 0 }} transition={{
-                duration: 0.1, delay: i * 0.1
-              }}>
-              <h3>
-                {article.text}
-              </h3>
-            </motion.div>
-          )
-        })}
-
-
+            ))}
+          </motion.div>
+        </motion.div>
       </div>
     </>
   )
